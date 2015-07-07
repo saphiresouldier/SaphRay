@@ -1,5 +1,6 @@
 # SaphRay
 SaphRay is a simple C++ raytracer, created from scratch for learning purposes. 
+
 It is made by Phil Gosch using QTCreator and CMake.
 
 A roadmap for future development can be found here: https://trello.com/b/en6VcfRl/saphray
