@@ -19,7 +19,7 @@ class SCENE
 
             void placeSphere(double radius, POINT pos, COLOR col);
             void printSpheres();
-            void placeLight(float intensity, POINT pos);
+            void placeLight(float intensity, POINT pos, COLOR col);
             void printLights();
             void createCamera(POINT center, VECTOR3 direction, float field_of_view);
 

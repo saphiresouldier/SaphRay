@@ -102,7 +102,7 @@ COLOR RAY::collideRay(const SCENE& scene)
             if(!skip_shading)
             {
                 double contribution = (theta * scene.lights[j].intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
-                final_col += (col * contribution); //TODO: Clamp this to ensure no artifacts
+                final_col += (col * (scene.lights[j].color * contribution)); //TODO: Clamp this to ensure no artifacts
                 //final_col += COLOR(theta); //use this to visualize individual properties
             }
         }

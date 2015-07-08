@@ -23,9 +23,9 @@ void SCENE::printSpheres()
     }
 }
 
-void SCENE::placeLight(float intensity, POINT pos)
+void SCENE::placeLight(float intensity, POINT pos, COLOR col)
 {
-    LIGHT li(pos, intensity);
+    LIGHT li(pos, intensity, col);
 
     lights.push_back(li);
 
