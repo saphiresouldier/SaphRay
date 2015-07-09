@@ -42,7 +42,7 @@ int main (int argc, char* const argv[])
     test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
     test_scene.placeLight(70.0, POINT(-2.0, 10.0, 5.0), COLOR(1.0, 0.0, 0.0));
     test_scene.placeLight(50.0, POINT(2.0, 10.0, 7.0), COLOR(0.0, 1.0, 0.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
+    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 0.0f), 45.0f);
 
 //testscene_2
 //    test_scene.placeSphere(1.0, POINT(0.0, 1.0, 6.0), COLOR(0.0f, 0.0f, 0.8f)); //blue
