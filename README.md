@@ -7,6 +7,10 @@ A roadmap for future development can be found here: https://trello.com/b/en6VcfR
 
 Here are some Images rendered with it:
 
+![Multiple light sources](https://pbs.twimg.com/media/CJ0LFfjVEAAoD9d.jpg)
+
+Stl triangle mesh rendering
+
 ![Multiple light sources](https://pbs.twimg.com/media/CIvg2dBWoAA_vJE.jpg)
 
 Multiple point lights sources
