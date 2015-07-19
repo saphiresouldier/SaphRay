@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 #include "../headers/scene.h"
@@ -77,6 +78,8 @@ int main (int argc, char* const argv[])
 //    test_scene.placeLight(1.0, POINT(-2.0, 2.0, 0.0));
 //    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
+    const clock_t begin_time = clock();
+
     for(int j = 0; j < IMAGEHEIGHT; j++)
     {
         for(int i = 0; i < IMAGEWIDTH; i++)
@@ -94,6 +97,8 @@ int main (int argc, char* const argv[])
 
         }
     }
+
+    cout << "Rendertime: " << float(clock() - begin_time) / CLOCKS_PER_SEC << " seconds" << endl;
 
     // Save rendered image to disk
     if(saveBMP(pixels, FILENAME))
