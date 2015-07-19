@@ -23,12 +23,13 @@ class VECTOR3
     virtual ~VECTOR3();
 
     double length() const;
-    double dot(VECTOR3 &v) const;
+    double dot(VECTOR3 v) const;
     VECTOR3 add(VECTOR3 &v) const;
-    VECTOR3 subtract(VECTOR3 &v) const;
+    VECTOR3 subtract(VECTOR3 v) const;
     VECTOR3 cross(VECTOR3 &v) const;
     void scale(double factor);
     void normalize();
+    bool isNull();
     VECTOR3 inverted() const {return VECTOR3(-x, -y, -z);}
 
     VECTOR3 operator * (const double &f) const

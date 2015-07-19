@@ -29,12 +29,7 @@ VECTOR3 CAMERA::getPrimaryRayDirection(double i_w, double i_h, int img_width, in
     dir.x = angle * ((i_w + 0.5) * dx - aspect_ratio);
     dir.y = angle * (-(i_h + 0.5) * dy + 1);
     dir.z = 1.0;
-    //dir.normalize();
-    //lookat.normalize();
-
-    dir += lookat;
     dir.normalize();
-
     return dir;
 
 }

@@ -5,19 +5,20 @@
 #ifndef OBJECT_H_INCLUDED
 #define OBJECT_H_INCLUDED
 
+//#include <cmath>
+#include <limits>
+
 #include "color.h"
 #include "point.h"
+#include "vector.h"
 
-class SPHERE
+class GEOMETRY
 {
     public:
-            SPHERE() : radius(1.0), center(0, 0, 0), color(0.5, 0.5, 0.5) {}
-            SPHERE(double radius, POINT center, COLOR color = COLOR(1.0)) : radius(radius), center(center), color(color) {}
-            virtual ~SPHERE() {}
+            GEOMETRY() {}
+            virtual ~GEOMETRY() {}
 
-            double radius;
-            POINT center;
-            COLOR color;
+            virtual bool intersect(POINT origin, VECTOR3 direction, double &depth) const = 0;
 };
 
 #endif // OBJECT_H_INCLUDED

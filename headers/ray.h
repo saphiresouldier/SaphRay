@@ -23,7 +23,6 @@ class RAY
                                     int img_width, int img_heigth);
             COLOR shootRay(const SCENE &scene, POINT o, VECTOR3 d);
             COLOR collideRay(const SCENE &scene);
-            bool collideSphere(const SPHERE& sphere, double &depth);
 
             POINT origin;
             VECTOR3 direction;

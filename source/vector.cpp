@@ -40,7 +40,7 @@ double VECTOR3::length() const
     return sqrt(dot(VECTOR3(x, y, z)));
 }
 
-double VECTOR3::dot(VECTOR3 &v) const
+double VECTOR3::dot(VECTOR3 v) const
 {
     return x*v.x + y*v.y + z*v.z;
 }
@@ -50,7 +50,7 @@ VECTOR3 VECTOR3::add(VECTOR3 &v) const
     return VECTOR3(x + v.x, y + v.y, z + v.z);
 }
 
-VECTOR3 VECTOR3::subtract(VECTOR3 &v) const
+VECTOR3 VECTOR3::subtract(VECTOR3 v) const
 {
     return VECTOR3(x - v.x, y - v.y, z - v.z);
 }
@@ -65,6 +65,13 @@ void VECTOR3::scale(double factor)
     x *= factor;
     y *= factor;
     z *= factor;
+}
+
+bool VECTOR3::isNull()
+{
+    if(x == 0.0 && y == 0.0 && z == 0.0)
+        return true;
+    return false;
 }
 
 void VECTOR3::normalize()
