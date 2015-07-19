@@ -5,6 +5,8 @@
 
 #include <cmath>
 #include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include <iostream>
 
 #include "../headers/scene.h"
@@ -100,7 +102,6 @@ int main (int argc, char* const argv[])
 bool saveBMP(COLOR** pix, const char* filename)
 {
     FILE *file_bmp;
-    errno_t err;
     int file_size = 54 + 3*IMAGEWIDTH*IMAGEHEIGHT;
 
     unsigned char* image = NULL;
@@ -126,8 +127,8 @@ bool saveBMP(COLOR** pix, const char* filename)
     bmp_info_header[10] = (unsigned char)(IMAGEHEIGHT >> 16);
     bmp_info_header[11] = (unsigned char)(IMAGEHEIGHT >> 24);
 
-    err = fopen_s(&file_bmp, filename, "wb");
-    if(err)
+    file_bmp = fopen(filename, "wb");
+    if(!file_bmp)
     {
         return false;
     }

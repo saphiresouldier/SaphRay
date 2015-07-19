@@ -5,11 +5,12 @@
 #ifndef VECTOR_H_INCLUDED
 #define VECTOR_H_INCLUDED
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "point.h"
 #include "color.h"
 
-const double M_PI = 3.1415692;
+//const double M_PI = 3.1415692;
 
 class VECTOR3
 {

@@ -8,7 +8,6 @@
 #include "point.h"
 #include "color.h"
 #include "vector.h"
-//#include "ray.h"
 
 class CAMERA
 {
