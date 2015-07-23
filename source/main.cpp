@@ -15,9 +15,8 @@
 #include "../headers/ray.h"
 #include "../headers/camera.h"
 
-//TODO: make image dimensions commandline argument
-const int IMAGEWIDTH = 512;
-const int IMAGEHEIGHT = 512;
+int IMAGEWIDTH = 512;
+int IMAGEHEIGHT = 512;
 const char* const FILENAME = "testfile.bmp";
 
 using namespace std;
@@ -28,6 +27,20 @@ bool saveBMP(COLOR** pix, const char* filename);
 // main function --------------------------------------------------------------
 int main (int argc, char* const argv[])
 {
+
+    for(int i = 0; i < argc; i++)
+    {
+        cout << "argument " << i << ": " << argv[i] << endl;
+
+        if(!(strcmp(argv[i], "-h")))
+        {
+            IMAGEHEIGHT = atoi(argv[i+1]);
+        }
+        else if(!(strcmp(argv[i], "-w")))
+        {
+            IMAGEWIDTH = atoi(argv[i+1]);
+        }
+    }
     //Create Scene
     SCENE test_scene;
 
@@ -51,19 +64,19 @@ int main (int argc, char* const argv[])
 //    test_scene.createCamera(POINT(0.0f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_triangle_1
-    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
-    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+//    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+//    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+//    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
+//    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
+//    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1
-//    test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
-//    test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
-//    test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
-//    test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
-//    test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0));
-//    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
+    test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
+    test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
+    test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
+    test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
+    test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0));
+    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
 //testscene_2
 //    test_scene.placeSphere(1.0, POINT(0.0, 1.0, 6.0), COLOR(0.0f, 0.0f, 0.8f)); //blue
