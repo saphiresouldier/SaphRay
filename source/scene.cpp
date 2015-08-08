@@ -12,22 +12,14 @@ void SCENE::placeTriangle(VECTOR3 v1, VECTOR3 v2, VECTOR3 v3, VECTOR3 n, COLOR c
 {
     TRIANGLE t(v1, v2, v3, n, col);
 
-    tris.push_back(t);
+    geo.push_back(new TRIANGLE(v1, v2, v3, n, col));
 }
 
 void SCENE::placeSphere(double radius, POINT pos, COLOR col)
 {
     SPHERE sp(radius, pos, col);
 
-    spheres.push_back(sp);
-}
-
-void SCENE::printSpheres()
-{
-    for(std::vector<SPHERE>::size_type i = 0; i != spheres.size(); i++)
-    {
-        std::cout << "testsphere: " << i << std::endl;
-    }
+    geo.push_back(new SPHERE(radius, pos, col));
 }
 
 void SCENE::placeLight(float intensity, POINT pos, COLOR col)
@@ -140,8 +132,7 @@ bool SCENE::loadSTL(const char* stl)
                     vertex3.z = z;
                     //vertex3 *= s;
                     //p1->addTri(vertex1, vertex2, vertex3, normal);
-                    TRIANGLE t(vertex1, vertex2, vertex3, normal, COLOR(0.5));
-                    tris.push_back(t);
+                    geo.push_back(new TRIANGLE(vertex1, vertex2, vertex3, normal, COLOR(0.5)));
 
                     read_normal = true;
                     v_count = 0;

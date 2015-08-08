@@ -22,6 +22,16 @@ void TRIANGLE::computeNormal()
     normal.normalize();
 }
 
+VECTOR3 TRIANGLE::getNormal(VECTOR3 intersec) const
+{
+    return normal;
+}
+
+COLOR TRIANGLE::getColor() const
+{
+    return color;
+}
+
 bool TRIANGLE::intersect(POINT origin, VECTOR3 direction, double &depth) const
 {
     //algorithm used:  http://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
@@ -29,25 +39,25 @@ bool TRIANGLE::intersect(POINT origin, VECTOR3 direction, double &depth) const
     VECTOR3 e1 = vertex[1] - vertex[0];
     VECTOR3 e2 = vertex[2] - vertex[0];
     VECTOR3 p = direction.cross(e2);// QVector3D::crossProduct(d, e2);
-    float det = e1.dot(p);// QVector3D::dotProduct(e1, p);
+    double det = e1.dot(p);// QVector3D::dotProduct(e1, p);
     if(det > -EPSILON && det < EPSILON)
         return false;
-    float inv_det = 1.f / det;
+    double inv_det = 1.f / det;
 
     VECTOR3 t = VECTOR3(origin) - vertex[0];
 
-    float u = (t.dot(p) * inv_det); // QVector3D::dotProduct(t, p) * inv_det);
+    double u = (t.dot(p) * inv_det); // QVector3D::dotProduct(t, p) * inv_det);
     if(u < 0.f || u > 1.f)
         return false;
 
     //QVector3D q = QVector3D::crossProduct(t, e1);
     VECTOR3 q = t.cross(e1);
 
-    float v = direction.dot(q) * inv_det; // (QVector3D::dotProduct(d, q) * inv_det);
+    double v = direction.dot(q) * inv_det; // (QVector3D::dotProduct(d, q) * inv_det);
     if(v < 0.f || (u + v) > 1.f)
         return false;
 
-    float dist = e2.dot(q) * inv_det; // QVector3D::dotProduct(e2, q) * inv_det;
+    double dist = e2.dot(q) * inv_det; // QVector3D::dotProduct(e2, q) * inv_det;
     if(dist > EPSILON)
     {
         //DEBUG PRINT

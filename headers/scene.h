@@ -28,9 +28,7 @@ class SCENE
             void createCamera(POINT center, VECTOR3 direction, float field_of_view);
             bool loadSTL(const char *stl);
 
-            //TODO: Replace with vector of GEOMETRY
-            std::vector<TRIANGLE> tris;
-            std::vector<SPHERE> spheres;
+            std::vector<GEOMETRY*> geo;
             std::vector<LIGHT> lights;
             CAMERA camera;
 };

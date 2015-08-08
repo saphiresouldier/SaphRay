@@ -2,6 +2,7 @@
 /// main.cpp : Defines the entry point for the application.
 //-----------------------------------------------------------------------------
 
+#define DEBUG
 
 #include <cmath>
 #include <cstdio>
@@ -30,7 +31,9 @@ int main (int argc, char* const argv[])
 
     for(int i = 0; i < argc; i++)
     {
+#ifdef DEBUG
         cout << "argument " << i << ": " << argv[i] << endl;
+#endif
 
         if(!(strcmp(argv[i], "-h")))
         {
@@ -52,40 +55,39 @@ int main (int argc, char* const argv[])
         pixels[i] = new COLOR[IMAGEHEIGHT];
     }
 
-    // testscene_stl_1
-    //test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    //test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
-//    if(test_scene.loadSTL("suzanne_plane_2.stl"))
-//    {
-//        std::cout << "STL file loaded" << std::endl;
-//    }
-//    test_scene.placeLight(40.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));
-//    test_scene.createCamera(POINT(0.0f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+// testscene_stl_1----------------------------------------------
+    test_scene.placeSphere(2.0, POINT(1.5, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    if(test_scene.loadSTL("suzanne_plane_2.stl"))
+    {
+        std::cout << "STL file loaded" << std::endl;
+    }
+    test_scene.placeLight(40.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));
+    test_scene.createCamera(POINT(0.0f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
-// testscene_triangle_1
+// testscene_triangle_1----------------------------------------
 //    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
 //    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
 //    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
 //    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
 //    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
-// testscene_1
-    test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
-    test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
-    test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
-    test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
-    test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
+// testscene_1-------------------------------------------------
+//    test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
+//    test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
+//    test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
+//    test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
+//    test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0));
+//    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
-//testscene_2
+//testscene_2---------------------------------------------------
 //    test_scene.placeSphere(1.0, POINT(0.0, 1.0, 6.0), COLOR(0.0f, 0.0f, 0.8f)); //blue
 //    test_scene.placeSphere(2.0, POINT(0.0, -1.0, 10.0), COLOR(0.0f, 1.0f, 0.0f)); //green
 //    test_scene.placeSphere(51.0, POINT(53.0, 0.0, 8.0), COLOR(0.8f, 0.8f, 0.8f)); //"ground plane"
 //    test_scene.placeLight(1.0, POINT(-20.0, 0.0, 8.0)); //set intesity higher in case of black render
 //    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
-//testscene_depth
+//testscene_depth-----------------------------------------------
 //    test_scene.placeSphere(2.0, POINT(0.0, 0.0, 10.0), COLOR(0.5f, 1.0f, 0.0f));
 //    test_scene.placeSphere(0.5, POINT(0.0, 0.0, 6.0), COLOR(0.0f, 0.0f, 0.8f));
 //    test_scene.placeLight(1.0, POINT(-2.0, 2.0, 0.0));
@@ -111,12 +113,14 @@ int main (int argc, char* const argv[])
         }
     }
 
-    cout << "Rendertime: " << float(clock() - begin_time) / CLOCKS_PER_SEC << " seconds" << endl;
+    float seconds = float(clock() - begin_time) / CLOCKS_PER_SEC;
+    int min = seconds / 60;
+    cout << "Rendertime: " << min << " min, " << seconds - (min * 60.0) << " seconds" << endl;
 
     // Save rendered image to disk
     if(saveBMP(pixels, FILENAME))
     {
-        cout << "File written!" << endl;
+        cout << "File written to: " << FILENAME << endl;
     }
     else
     {

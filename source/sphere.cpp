@@ -4,6 +4,19 @@
 
 #include "../headers/sphere.h"
 
+VECTOR3 SPHERE::getNormal(VECTOR3 intersec) const
+{
+    VECTOR3 normal = VECTOR3(intersec - center);
+    normal.normalize();
+
+    return normal;
+}
+
+COLOR SPHERE::getColor() const
+{
+    return color;
+}
+
 bool SPHERE::intersect(POINT origin, VECTOR3 direction, double& depth) const
 {
     depth = std::numeric_limits<double>::max();

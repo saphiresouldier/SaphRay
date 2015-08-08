@@ -15,6 +15,8 @@ class SPHERE : public GEOMETRY
             COLOR color;
 
             bool intersect(POINT origin, VECTOR3 direction, double &depth) const;
+            VECTOR3 getNormal(VECTOR3 intersec) const;
+            COLOR getColor() const;
 };
 
 #endif // SPHERE_H
