@@ -6,6 +6,10 @@
 SCENE::~SCENE()
 {
 
+    for(std::vector<GEOMETRY*>::size_type it = 0; it != geo.size(); it++)
+    {
+        delete geo[it];
+    }
 }
 
 void SCENE::placeTriangle(VECTOR3 v1, VECTOR3 v2, VECTOR3 v3, VECTOR3 n, COLOR col)
