@@ -5,7 +5,6 @@
 
 SCENE::~SCENE()
 {
-
     for(std::vector<GEOMETRY*>::size_type it = 0; it != geo.size(); it++)
     {
         delete geo[it];
@@ -14,16 +13,27 @@ SCENE::~SCENE()
 
 void SCENE::placeTriangle(VECTOR3 v1, VECTOR3 v2, VECTOR3 v3, VECTOR3 n, COLOR col)
 {
-    TRIANGLE t(v1, v2, v3, n, col);
+    try
+    {
+        geo.push_back(new TRIANGLE(v1, v2, v3, n, col));
+    }
+    catch(std::bad_alloc &ba)
+    {
+        std::cerr << "bad_alloc: " << ba.what() << std::endl;
+    }
 
-    geo.push_back(new TRIANGLE(v1, v2, v3, n, col));
 }
 
 void SCENE::placeSphere(double radius, POINT pos, COLOR col)
 {
-    SPHERE sp(radius, pos, col);
-
-    geo.push_back(new SPHERE(radius, pos, col));
+    try
+    {
+        geo.push_back(new SPHERE(radius, pos, col));
+    }
+    catch(std::bad_alloc &ba)
+    {
+        std::cerr << "bad_alloc: " << ba.what() << std::endl;
+    }
 }
 
 void SCENE::placeLight(float intensity, POINT pos, COLOR col)
