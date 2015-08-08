@@ -19,6 +19,7 @@
 int IMAGEWIDTH = 512;
 int IMAGEHEIGHT = 512;
 const char* const FILENAME = "testfile.bmp";
+int MAXDEPTH = 5;
 
 using namespace std;
 
@@ -63,21 +64,21 @@ int main (int argc, char* const argv[])
     }
 
 // testscene_stl_1----------------------------------------------
-//    test_scene.placeSphere(2.0, POINT(1.5, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-//    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-//    if(test_scene.loadSTL("suzanne_plane_2.stl"))
-//    {
-//        std::cout << "STL file loaded" << std::endl;
-//    }
-//    test_scene.placeLight(40.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));a
-//    test_scene.createCamera(POINT(0.0f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+    test_scene.placeSphere(2.0, POINT(1.5, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    if(test_scene.loadSTL("suzanne_plane_2.stl"))
+    {
+        std::cout << "STL file loaded" << std::endl;
+    }
+    test_scene.placeLight(50.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));
+    test_scene.createCamera(POINT(0.5f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_triangle_1----------------------------------------
-    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
-    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+//    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+//    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+//    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
+//    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
+//    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1-------------------------------------------------
 //    test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));

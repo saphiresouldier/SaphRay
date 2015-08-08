@@ -21,8 +21,8 @@ class RAY
 
             COLOR shootPrimaryRay(SCENE& scene, double i_w, double i_h,
                                     int img_width, int img_heigth);
-            COLOR shootRay(const SCENE &scene, POINT o, VECTOR3 d);
-            COLOR collideRay(const SCENE &scene);
+            COLOR shootRay(const SCENE &scene, POINT o, VECTOR3 d, int depth);
+            COLOR collideRay(const SCENE &scene, int depth);
 
             POINT origin;
             VECTOR3 direction;

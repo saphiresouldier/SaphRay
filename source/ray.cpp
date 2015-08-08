@@ -5,6 +5,8 @@
 #include "../headers/ray.h"
 #include "../headers/scene.h"
 
+extern int MAXDEPTH;
+
 RAY::RAY()  : origin(POINT(0.0f)), direction(VECTOR3(1.0f))
 {
 }
@@ -23,17 +25,17 @@ COLOR RAY::shootPrimaryRay(SCENE &scene, double i_w, double i_h,
     origin = scene.camera.getCameraPosition();
     direction = scene.camera.getPrimaryRayDirection(i_w, i_h, img_width, img_heigth);
 
-    return collideRay(scene);
+    return collideRay(scene, 1);
 }
 
-COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d)
+COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d, int depth)
 {
     origin = o;
     direction = d;
-    return collideRay(scene);
+    return collideRay(scene, depth + 1);
 }
 
-COLOR RAY::collideRay(const SCENE& scene)
+COLOR RAY::collideRay(const SCENE& scene, int depth)
 {   
     double current_depth = std::numeric_limits<double>::max();
     COLOR col(0.0), final_col(0.0);
@@ -41,6 +43,7 @@ COLOR RAY::collideRay(const SCENE& scene)
     bool collision = false;
     int geo_index = -1;
 
+    //check for collision with geometry
     for(std::vector<GEOMETRY*>::size_type i = 0; i != scene.geo.size(); i++)
     {
         double collision_depth = 0;
@@ -59,6 +62,8 @@ COLOR RAY::collideRay(const SCENE& scene)
 
     if(!collision) //background, no shading computation required
         return final_col;
+//    else if(collision && (depth >= MAXDEPTH))
+//        return col;
 
     //compute shading-------------------------------
     VECTOR3 intersection_point(VECTOR3(origin) + (direction*current_depth));
@@ -93,8 +98,33 @@ COLOR RAY::collideRay(const SCENE& scene)
             if(!skip_shading)
             {
                 double contribution = (theta * scene.lights[j].intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
-                final_col += (col * (scene.lights[j].color * contribution)); //TODO: Clamp this to ensure no artifacts
+                //TODO: don't calculate refl vector if maxdepth is reached
+                //calculate reflection vector
+                VECTOR3 view = VECTOR3(origin) - intersection_point;
+                view.normalize();
+                VECTOR3 refl = normal * (normal.dot(view)) * (2.0) - view;
+                refl.normalize();
+                COLOR refl_col(0.0);
+                RAY *reflection = new RAY(POINT(intersection_point.x + normal.x * 0.001, intersection_point.y + normal.y * 0.001, intersection_point.z + normal.z * 0.001), refl);
+                if(depth < MAXDEPTH)
+                {
+                    refl_col = reflection->collideRay(scene, depth + 1);
+                    final_col += ((col * (scene.lights[j].color * contribution)) * 0.7) + (refl_col * 0.3); //TODO: Clamp this to ensure no artifacts
+                    //final_col += refl_col;
+                }
+                else
+                {
+                    final_col += ((col * (scene.lights[j].color * contribution))); //TODO: Clamp this to ensure no artifacts
+                }
+
+                //calculate shading
+                //double contribution = (theta * scene.lights[j].intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
+                //final_col += ((col * (scene.lights[j].color * contribution)) * 0.5) + (refl_col * 0.5); //TODO: Clamp this to ensure no artifacts
                 //final_col += COLOR(theta); //use this to visualize individual properties
+                //final_col += refl_col; //use this to visualize individual properties
+
+                if(reflection)
+                    delete reflection;
             }
         }
     }
