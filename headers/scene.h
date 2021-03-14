@@ -26,11 +26,14 @@ class SCENE
             void placeLight(float intensity, POINT pos, COLOR col);
             void printLights();
             void createCamera(POINT center, VECTOR3 direction, float field_of_view);
+            void setName(std::string sceneName);
+            std::string getName() const;
             bool loadSTL(const char *stl);
 
             std::vector<GEOMETRY*> geo;
             std::vector<LIGHT> lights;
             CAMERA camera;
+            std::string name;
 };
 
 #endif // SCENE_H_INCLUDED

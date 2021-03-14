@@ -44,6 +44,16 @@ void SCENE::placeLight(float intensity, POINT pos, COLOR col)
 
 }
 
+void SCENE::setName(std::string sceneName)
+{
+  name = sceneName;
+}
+
+std::string SCENE::getName() const
+{
+  return name;
+}
+
 void SCENE::printLights()
 {
     for(std::vector<LIGHT>::size_type i = 0; i != lights.size(); i++)
