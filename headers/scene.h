@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <cstdio>
+#include <ctype.h>
 #include "object.h"
 #include "sphere.h"
 #include "triangle.h"

@@ -94,7 +94,7 @@ bool SCENE::loadSTL(const char* stl)
         {
             i=0;
             cnt=0;
-            fgets(a,100,stlfp);
+            std::fgets(a,100,stlfp);
             while(a[i]!='\0')   //advance trough text of line (eg. " Facet Normal ") until end of line
             {
                 if(!islower((int)a[i]) && !isupper((int)a[i]) && a[i]!=' ') //stop if current letter is a number

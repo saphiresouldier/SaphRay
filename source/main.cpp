@@ -62,23 +62,26 @@ int main (int argc, char* const argv[])
     }
 
 // testscene_stl_1----------------------------------------------
-    //test_scene.setName("testscene_stl_1");
-    //test_scene.placeSphere(2.0, POINT(1.5, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    //if(test_scene.loadSTL("suzanne_plane_2.stl"))
-    //{
-    //    std::cout << "STL file loaded" << std::endl;
-    //}
-    //test_scene.placeLight(50.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));
-    //test_scene.createCamera(POINT(0.5f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+    test_scene.setName("testscene_stl_1");
+    test_scene.placeSphere(2.0, POINT(0.25, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    if(test_scene.loadSTL("../models/suzanne_plane_2.stl"))
+    {
+        std::cout << "STL file loaded" << std::endl;
+    }
+    /*test_scene.placeLight(50.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));
+    test_scene.createCamera(POINT(0.5f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);*/
+
+    test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
+    test_scene.createCamera(POINT(-3.5f, 0.0, -10.0), VECTOR3(0.2f, 0.0f, 1.0f), 60.0f);
 
 // testscene_triangle_1----------------------------------------
-    test_scene.setName("testscene_triangle_1");
-    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
-    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+    //test_scene.setName("testscene_triangle_1");
+    //test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    //test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
+    //test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
+    //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1-------------------------------------------------
     /*test_scene.setName("testscene_1");
@@ -106,6 +109,8 @@ int main (int argc, char* const argv[])
 
     const clock_t begin_time = clock();
 
+    std::cout << "------------ Starting Rendering! ----------------" << std::endl;
+
     for(int j = 0; j < IMAGEHEIGHT; j++)
     {
         for(int i = 0; i < IMAGEWIDTH; i++)
@@ -122,6 +127,10 @@ int main (int argc, char* const argv[])
             pixels[i][j] = primray.shootPrimaryRay(test_scene, (double)j * vScale, (double)i * uScale, IMAGEWIDTH, IMAGEHEIGHT);
 
         }
+
+        if (j % 10 == 0) {
+          std::cout << "rendered: " << j << " of " << IMAGEHEIGHT << " rows!" << std::endl;
+        }  
     }
 
     float seconds = float(clock() - begin_time) / CLOCKS_PER_SEC;
