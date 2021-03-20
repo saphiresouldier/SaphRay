@@ -17,11 +17,12 @@
 #include "../headers/camera.h"
 #include "../headers/rng.h"
 
+// config parameters
 int IMAGEWIDTH = 512;
 int IMAGEHEIGHT = 512;
-int SAMPLES_PER_PIXEL = 64;
-const char* FILE_EXTENSION = ".bmp";
-int MAXDEPTH = 5;
+const int SAMPLES_PER_PIXEL = 1;
+const int MAXDEPTH = 1;
+const char* FILE_EXTENSION = ".bmp"; 
 
 static thread_local uint32_t seed_state = 1337;
 
@@ -54,6 +55,7 @@ int main (int argc, char* const argv[])
     COLOR** pixels;
     try
     {
+      // TODO: width and height swapped!
         pixels = new COLOR*[IMAGEWIDTH];
         for(int i= 0; i < IMAGEWIDTH; ++i)
         {
@@ -126,8 +128,13 @@ int main (int argc, char* const argv[])
             else if (IMAGEWIDTH < IMAGEHEIGHT)
               vScale = (double)IMAGEHEIGHT / IMAGEWIDTH;
 
+            // TODO
+            /*uScale = 1.0 / uScale;
+            vScale = 1.0 / vScale;*/
+
             RAY primray;
-            pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * uScale, ((double)i * uScale + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT);
+            // TODO: i and j swapped!
+            pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * vScale, ((double)i + RandomFloat01(seed_state)) * uScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH);
           }
             
           pixels[i][j] /= SAMPLES_PER_PIXEL;

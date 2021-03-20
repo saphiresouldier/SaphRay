@@ -5,8 +5,6 @@
 #include "../headers/ray.h"
 #include "../headers/scene.h"
 
-extern int MAXDEPTH;
-
 RAY::RAY()  : origin(POINT(0.0f)), direction(VECTOR3(1.0f))
 {
 }
@@ -19,23 +17,24 @@ RAY::~RAY()
 {
 }
 
+// TODO: nicer way of passing along maxdepth?
 COLOR RAY::shootPrimaryRay(SCENE &scene, double i_w, double i_h,
-                            int img_width, int img_heigth)
+                            int img_width, int img_heigth, int max_depth)
 {
     origin = scene.camera.getCameraPosition();
     direction = scene.camera.getPrimaryRayDirection(i_w, i_h, img_width, img_heigth);
 
-    return collideRay(scene, 1);
+    return collideRay(scene, 1, max_depth);
 }
 
-COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d, int depth)
+COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d, int cur_depth, int max_depth)
 {
     origin = o;
     direction = d;
-    return collideRay(scene, depth + 1);
+    return collideRay(scene, cur_depth + 1, max_depth);
 }
 
-COLOR RAY::collideRay(const SCENE& scene, int depth)
+COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
 {   
     double current_depth = std::numeric_limits<double>::max();
     COLOR col(0.0), final_col(0.0);
@@ -61,6 +60,7 @@ COLOR RAY::collideRay(const SCENE& scene, int depth)
     }
 
     if(!collision) //background, no shading computation required
+        // TODO: compute background color: env/sky or gradient
         return final_col;
 //    else if(collision && (depth >= MAXDEPTH))
 //        return col;
@@ -106,9 +106,9 @@ COLOR RAY::collideRay(const SCENE& scene, int depth)
                 refl.normalize();
                 COLOR refl_col(0.0);
                 RAY *reflection = new RAY(POINT(intersection_point.x + normal.x * 0.001, intersection_point.y + normal.y * 0.001, intersection_point.z + normal.z * 0.001), refl);
-                if(depth < MAXDEPTH)
+                if(cur_depth < max_depth)
                 {
-                    refl_col = reflection->collideRay(scene, depth + 1);
+                    refl_col = reflection->collideRay(scene, cur_depth + 1, max_depth);
                     final_col += ((col * (scene.lights[j].color * contribution)) * 0.7) + (refl_col * 0.3); //TODO: Clamp this to ensure no artifacts
                     //final_col += refl_col;
                 }
