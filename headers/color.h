@@ -5,7 +5,7 @@
 #ifndef COLOR_H_INCLUDED
 #define COLOR_H_INCLUDED
 
-//#include <iostream>
+#include <iostream>
 
 class COLOR
 {
@@ -24,7 +24,7 @@ class COLOR
             return COLOR(r / f, g / f, b / f);
           }
           else {
-            //std::cout << "Error: dividing color by 0.0" << std::endl;
+            std::cout << "Error: dividing color by 0.0" << std::endl;
             return COLOR(1.0, 0.0, 1.0);
           }
         }
@@ -44,7 +44,7 @@ class COLOR
             r /= f; g /= f; b /= f; return *this;
           }
           else {
-            //std::cout << "Error: dividing color by 0.0" << std::endl;
+            std::cout << "Error: dividing color by 0.0" << std::endl;
             return COLOR(1.0, 0.0, 1.0);
           }
         }

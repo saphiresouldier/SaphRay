@@ -23,7 +23,7 @@ int SAMPLES_PER_PIXEL = 64;
 const char* FILE_EXTENSION = ".bmp";
 int MAXDEPTH = 5;
 
-uint32_t seed_state = 1337;
+static thread_local uint32_t seed_state = 1337;
 
 // forward declarations -------------------------------------------------------
 bool saveBMP(COLOR** pix, const char* filename);
