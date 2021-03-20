@@ -15,11 +15,15 @@
 #include "../headers/color.h"
 #include "../headers/ray.h"
 #include "../headers/camera.h"
+#include "../headers/rng.h"
 
 int IMAGEWIDTH = 512;
 int IMAGEHEIGHT = 512;
+int SAMPLES_PER_PIXEL = 64;
 const char* FILE_EXTENSION = ".bmp";
 int MAXDEPTH = 5;
+
+uint32_t seed_state = 1337;
 
 // forward declarations -------------------------------------------------------
 bool saveBMP(COLOR** pix, const char* filename);
@@ -62,26 +66,23 @@ int main (int argc, char* const argv[])
     }
 
 // testscene_stl_1----------------------------------------------
-    test_scene.setName("testscene_stl_1");
-    test_scene.placeSphere(2.0, POINT(0.25, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    if(test_scene.loadSTL("../models/suzanne_plane_2.stl"))
-    {
-        std::cout << "STL file loaded" << std::endl;
-    }
-    /*test_scene.placeLight(50.0, POINT(-3.0, 2.5, -5.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.5f, 0.0, -5.0), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);*/
-
-    test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
-    test_scene.createCamera(POINT(-3.5f, 0.0, -10.0), VECTOR3(0.2f, 0.0f, 1.0f), 60.0f);
+    //test_scene.setName("testscene_stl_1");
+    //test_scene.placeSphere(2.0, POINT(0.25, -3.0, 2.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    //if(test_scene.loadSTL("../models/suzanne_plane_2.stl"))
+    //{
+    //    std::cout << "STL file loaded" << std::endl;
+    //}
+    //test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
+    //test_scene.createCamera(POINT(-3.5f, 0.0, -10.0), VECTOR3(0.2f, 0.0f, 1.0f), 60.0f);
 
 // testscene_triangle_1----------------------------------------
-    //test_scene.setName("testscene_triangle_1");
-    //test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    //test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
-    //test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
-    //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+    test_scene.setName("testscene_triangle_1");
+    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
+    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
+    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1-------------------------------------------------
     /*test_scene.setName("testscene_1");
@@ -115,17 +116,21 @@ int main (int argc, char* const argv[])
     {
         for(int i = 0; i < IMAGEWIDTH; i++)
         {
+          for (int k = 0; k < SAMPLES_PER_PIXEL; k++)
+          {
             //Scale view plane for aspect ratio fix (otherwise image looks stretched)
             double uScale = 1.0;
             double vScale = 1.0;
-            if(IMAGEWIDTH > IMAGEHEIGHT)
-                uScale = (double) IMAGEWIDTH / IMAGEHEIGHT;
-            else if(IMAGEWIDTH < IMAGEHEIGHT)
-                vScale = (double) IMAGEHEIGHT / IMAGEWIDTH;
+            if (IMAGEWIDTH > IMAGEHEIGHT)
+              uScale = (double)IMAGEWIDTH / IMAGEHEIGHT;
+            else if (IMAGEWIDTH < IMAGEHEIGHT)
+              vScale = (double)IMAGEHEIGHT / IMAGEWIDTH;
 
             RAY primray;
-            pixels[i][j] = primray.shootPrimaryRay(test_scene, (double)j * vScale, (double)i * uScale, IMAGEWIDTH, IMAGEHEIGHT);
-
+            pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * uScale, ((double)i * uScale + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT);
+          }
+            
+          pixels[i][j] /= SAMPLES_PER_PIXEL;
         }
 
         if (j % 10 == 0) {
