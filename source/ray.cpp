@@ -60,8 +60,7 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
     }
 
     if(!collision) //background, no shading computation required
-        // TODO: compute background color: env/sky or gradient
-        return final_col;
+        return computeBackgroundColor(scene);
 //    else if(collision && (depth >= MAXDEPTH))
 //        return col;
 
@@ -130,4 +129,11 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
     }
 
     return final_col;
+}
+
+COLOR RAY::computeBackgroundColor(const SCENE& scene)
+{
+  VECTOR3 bg_dir = direction;
+  bg_dir.normalize();
+  return COLOR(abs(bg_dir.x), abs(bg_dir.y), abs(bg_dir.z));
 }

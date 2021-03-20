@@ -23,9 +23,11 @@ class RAY
                                     int img_width, int img_heigth, int max_depth);
             COLOR shootRay(const SCENE &scene, POINT o, VECTOR3 d, int cur_depth, int max_depth);
             COLOR collideRay(const SCENE &scene, int cur_depth, int max_depth);
+            COLOR computeBackgroundColor(const SCENE& scene);
 
             POINT origin;
             VECTOR3 direction;
+
 };
 
 #endif // RAY_H_INCLUDED

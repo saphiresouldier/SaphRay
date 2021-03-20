@@ -17,11 +17,11 @@
 #include "../headers/camera.h"
 #include "../headers/rng.h"
 
-// config parameters
+// config parameters ---------------------------------------------------------
 int IMAGEWIDTH = 512;
 int IMAGEHEIGHT = 512;
-const int SAMPLES_PER_PIXEL = 1;
-const int MAXDEPTH = 1;
+const int SAMPLES_PER_PIXEL = 32;
+const int MAXDEPTH = 5;
 const char* FILE_EXTENSION = ".bmp"; 
 
 static thread_local uint32_t seed_state = 1337;
