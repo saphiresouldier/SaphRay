@@ -45,7 +45,7 @@ VECTOR3 RandomInUnitSphere(uint32_t& state)
 VECTOR3 RandomUnitVector(uint32_t& state)
 {
   float z = RandomFloat01(state) * 2.0f - 1.0f;
-  float a = RandomFloat01(state) * 2.0f * M_PI;
+  float a = RandomFloat01(state) * 2.0f * (float)M_PI;
   float r = sqrtf(1.0f - z * z);
   float x = r * cosf(a);
   float y = r * sinf(a);

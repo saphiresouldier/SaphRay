@@ -9,6 +9,11 @@ SCENE::~SCENE()
     {
         delete geo[it];
     }
+
+    for (std::vector<LIGHT*>::size_type it_l = 0; it_l != lights.size(); it_l++)
+    {
+      delete lights[it_l];
+    }
 }
 
 void SCENE::placeTriangle(VECTOR3 v1, VECTOR3 v2, VECTOR3 v3, VECTOR3 n, COLOR col)
@@ -38,10 +43,14 @@ void SCENE::placeSphere(double radius, POINT pos, COLOR col)
 
 void SCENE::placeLight(float intensity, POINT pos, COLOR col)
 {
-    LIGHT li(pos, intensity, col);
-
-    lights.push_back(li);
-
+  try
+  {
+    lights.push_back(new LIGHT(pos, intensity, col));
+  }
+  catch (std::bad_alloc& ba)
+  {
+    std::cerr << "bad_alloc: " << ba.what() << std::endl;
+  }
 }
 
 void SCENE::setName(std::string sceneName)
@@ -68,7 +77,7 @@ void SCENE::createCamera(POINT center, VECTOR3 direction, float field_of_view)
 
 }
 
-bool SCENE::loadSTL(const char* stl)
+bool SCENE::loadSTL(const char* stl, COLOR color)
 {
     //const char *stl = "suzanne.stl";
 
@@ -156,7 +165,7 @@ bool SCENE::loadSTL(const char* stl)
                     vertex3.z = z;
                     //vertex3 *= s;
                     //p1->addTri(vertex1, vertex2, vertex3, normal);
-                    geo.push_back(new TRIANGLE(vertex1, vertex2, vertex3, normal, COLOR(0.5)));
+                    geo.push_back(new TRIANGLE(vertex1, vertex2, vertex3, normal, color));
 
                     read_normal = true;
                     v_count = 0;

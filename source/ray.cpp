@@ -5,6 +5,9 @@
 #include "../headers/ray.h"
 #include "../headers/scene.h"
 
+// DEBUG DEFINES -------------------------
+//#define NORMALS_RENDERING
+
 RAY::RAY()  : origin(POINT(0.0f)), direction(VECTOR3(1.0f))
 {
 }
@@ -71,7 +74,7 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
     for(std::vector<LIGHT>::size_type j = 0; j != scene.lights.size(); j++)
     {
         bool skip_shading = false;
-        VECTOR3 L(VECTOR3(scene.lights[j].position) - intersection_point); //[j]
+        VECTOR3 L(VECTOR3(scene.lights[j]->position) - intersection_point); //[j]
         //std::cout << "L: " << L.x << " " << L.y << " "<< L.z << " " << std::endl;
         //std::cout << "with intersection point at " << intersection_point.x << " " << intersection_point.y << " " << intersection_point.z << std::endl;
         double dist = L.length();
@@ -96,7 +99,12 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
 
             if(!skip_shading)
             {
-                double contribution = (theta * scene.lights[j].intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
+#if defined NORMALS_RENDERING
+              normal.normalize();
+              return COLOR((normal.x + 1.0) / 2.0, (normal.y + 1.0) / 2.0, (normal.z + 1.0) / 2.0);
+#endif
+
+                double contribution = (theta * scene.lights[j]->intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
                 //TODO: don't calculate refl vector if maxdepth is reached
                 //calculate reflection vector
                 VECTOR3 view = VECTOR3(origin) - intersection_point;
@@ -108,12 +116,12 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
                 if(cur_depth < max_depth)
                 {
                     refl_col = reflection->collideRay(scene, cur_depth + 1, max_depth);
-                    final_col += ((col * (scene.lights[j].color * contribution)) * 0.7) + (refl_col * 0.3); //TODO: Clamp this to ensure no artifacts
+                    final_col += ((col * (scene.lights[j]->color * contribution)) * 0.7) + (refl_col * 0.3); //TODO: Clamp this to ensure no artifacts
                     //final_col += refl_col;
                 }
                 else
                 {
-                    final_col += ((col * (scene.lights[j].color * contribution))); //TODO: Clamp this to ensure no artifacts
+                    final_col += ((col * (scene.lights[j]->color * contribution))); //TODO: Clamp this to ensure no artifacts
                 }
 
                 //calculate shading
@@ -135,5 +143,10 @@ COLOR RAY::computeBackgroundColor(const SCENE& scene)
 {
   VECTOR3 bg_dir = direction;
   bg_dir.normalize();
-  return COLOR(abs(bg_dir.x), abs(bg_dir.y), abs(bg_dir.z));
+#if defined NORMALS_RENDERING
+  //return COLOR(abs(bg_dir.x), abs(bg_dir.y), abs(bg_dir.z));
+  return COLOR((bg_dir.x + 1.0) / 2.0, (bg_dir.y + 1.0) / 2.0, (bg_dir.z + 1.0) / 2.0);
+#else
+  return COLOR(0.0);
+#endif
 }

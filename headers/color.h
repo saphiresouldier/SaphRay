@@ -45,7 +45,7 @@ class COLOR
           }
           else {
             std::cout << "Error: dividing color by 0.0" << std::endl;
-            return COLOR(1.0, 0.0, 1.0);
+            return *this;
           }
         }
 

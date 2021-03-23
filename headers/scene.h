@@ -29,10 +29,10 @@ class SCENE
             void createCamera(POINT center, VECTOR3 direction, float field_of_view);
             void setName(std::string sceneName);
             std::string getName() const;
-            bool loadSTL(const char *stl);
+            bool loadSTL(const char *stl, COLOR color);
 
             std::vector<GEOMETRY*> geo;
-            std::vector<LIGHT> lights;
+            std::vector<LIGHT*> lights;
             CAMERA camera;
             std::string name;
 };
