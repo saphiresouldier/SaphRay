@@ -20,8 +20,8 @@
 // config parameters ---------------------------------------------------------
 int IMAGEWIDTH = 512;
 int IMAGEHEIGHT = 512;
-const int SAMPLES_PER_PIXEL = 32;
-const int MAXDEPTH = 5;
+const int SAMPLES_PER_PIXEL = 8;
+const int MAXDEPTH = 3;
 const char* FILE_EXTENSION = ".bmp"; 
 
 static thread_local uint32_t seed_state = 1337;
@@ -68,28 +68,28 @@ int main (int argc, char* const argv[])
     }
 
 // testscene_stl_1----------------------------------------------
-    //test_scene.setName("testscene_stl_1");
-    //test_scene.placeSphere(2.0, POINT(0.25, -3.0, 2.0), COLOR(1.0f, 1.0f, 1.0f)); //big sphere
-    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    //test_scene.placeSphere(0.7, POINT(-5.5, -4.0, 3.0), COLOR(1.0f, 0.6f, 0.0f)); //small sphere
-    //if(test_scene.loadSTL("../models/suzanne_plane_3.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
-    //{
-    //    std::cout << "STL file loaded" << std::endl;
-    //}
-    //if (test_scene.loadSTL("../models/plane_1.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
-    //{
-    //  std::cout << "STL file loaded" << std::endl;
-    //}
-    //test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
-    //test_scene.createCamera(POINT(-3.5f, 0.0, -10.0), VECTOR3(0.2f, 0.0f, 1.0f), 60.0f);
+    test_scene.setName("testscene_stl_1");
+    test_scene.placeSphere(2.0, POINT(0.25, -3.0, 2.0), COLOR(1.0f, 1.0f, 1.0f)); //big sphere
+    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    test_scene.placeSphere(0.7, POINT(-5.5, -4.0, 3.0), COLOR(1.0f, 0.6f, 0.0f)); //small sphere
+    if(test_scene.loadSTL("../models/suzanne_plane_3.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
+    {
+        std::cout << "STL file loaded" << std::endl;
+    }
+    if (test_scene.loadSTL("../models/plane_1.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
+    {
+      std::cout << "STL file loaded" << std::endl;
+    }
+    test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
+    test_scene.createCamera(POINT(-3.5f, 0.0, -10.0), VECTOR3(0.2f, 0.0f, 1.0f), 60.0f);
 
 // testscene_triangle_1----------------------------------------
-    test_scene.setName("testscene_triangle_1");
-    test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
-    test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
+    //test_scene.setName("testscene_triangle_1");
+    //test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    //test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
+    //test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
+    //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1-------------------------------------------------
     //test_scene.setName("testscene_1");
@@ -116,8 +116,9 @@ int main (int argc, char* const argv[])
     test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);*/
 
     const clock_t begin_time = clock();
+    unsigned long rays = 0;
 
-    std::cout << "------------ Starting Rendering! ----------------" << std::endl;
+    std::cout << "------------ Starting Rendering of scene: " << test_scene.name << " !----------------" << std::endl;
 
     for(int j = 0; j < IMAGEHEIGHT; j++)
     {
@@ -134,12 +135,12 @@ int main (int argc, char* const argv[])
               vScale = (double)IMAGEHEIGHT / IMAGEWIDTH;
 
             // TODO
-            /*uScale = 1.0 / uScale;
-            vScale = 1.0 / vScale;*/
+            //uScale = 1.0 / uScale;
+            //vScale = 1.0 / vScale;
 
             RAY primray;
             // TODO: i and j swapped!
-            pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * vScale, ((double)i + RandomFloat01(seed_state)) * uScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH);
+            pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * uScale, ((double)i + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH, rays);
           }
             
           pixels[i][j] /= SAMPLES_PER_PIXEL;
@@ -153,6 +154,8 @@ int main (int argc, char* const argv[])
     float seconds = float(clock() - begin_time) / CLOCKS_PER_SEC;
     int min = static_cast<int>(seconds / 60);
     std::cout << "Rendertime: " << min << " min, " << seconds - (min * 60.0) << " seconds" << std::endl;
+    std::cout << "Number of rays traced: " << rays << std::endl;
+    std::cout << "MRays/s: " << rays / 1000.0 / seconds << std::endl;
 
     // Save rendered image to disk
     std::string filename = test_scene.getName().append(FILE_EXTENSION);
@@ -205,7 +208,6 @@ bool saveBMP(COLOR** pix, const char* filename)
     bmp_info_header[10] = (unsigned char)(IMAGEHEIGHT >> 16);
     bmp_info_header[11] = (unsigned char)(IMAGEHEIGHT >> 24);
 
-    //file_bmp = fopen(filename, "wb");
     errno_t err;
     if ((err = fopen_s(&file_bmp, filename, "wb")) != 0) {
       std::cout << "Error opening file for writing BMP!" << std::endl;

@@ -22,28 +22,29 @@ RAY::~RAY()
 
 // TODO: nicer way of passing along maxdepth?
 COLOR RAY::shootPrimaryRay(SCENE &scene, double i_w, double i_h,
-                            int img_width, int img_heigth, int max_depth)
+                            int img_width, int img_heigth, int max_depth, unsigned long& raycounter)
 {
     origin = scene.camera.getCameraPosition();
     direction = scene.camera.getPrimaryRayDirection(i_w, i_h, img_width, img_heigth);
-
-    return collideRay(scene, 1, max_depth);
+    
+    return collideRay(scene, 1, max_depth, raycounter);
 }
 
-COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d, int cur_depth, int max_depth)
+COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d, int cur_depth, int max_depth, unsigned long& raycounter)
 {
     origin = o;
     direction = d;
-    return collideRay(scene, cur_depth + 1, max_depth);
+    return collideRay(scene, cur_depth + 1, max_depth, raycounter);
 }
 
-COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
+COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth, unsigned long& raycounter)
 {   
     double current_depth = std::numeric_limits<double>::max();
     COLOR col(0.0), final_col(0.0);
     VECTOR3 normal;
     bool collision = false;
     int geo_index = -1;
+    raycounter++;
 
     //check for collision with geometry
     for(std::vector<GEOMETRY*>::size_type i = 0; i != scene.geo.size(); i++)
@@ -115,7 +116,7 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth)
                 RAY *reflection = new RAY(POINT(intersection_point.x + normal.x * 0.001, intersection_point.y + normal.y * 0.001, intersection_point.z + normal.z * 0.001), refl);
                 if(cur_depth < max_depth)
                 {
-                    refl_col = reflection->collideRay(scene, cur_depth + 1, max_depth);
+                    refl_col = reflection->collideRay(scene, cur_depth + 1, max_depth, raycounter);
                     final_col += ((col * (scene.lights[j]->color * contribution)) * 0.7) + (refl_col * 0.3); //TODO: Clamp this to ensure no artifacts
                     //final_col += refl_col;
                 }
