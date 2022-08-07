@@ -77,6 +77,11 @@ void SCENE::createCamera(POINT center, VECTOR3 direction, float field_of_view)
 
 }
 
+CAMERA SCENE::getCamera() const
+{
+  return camera;
+}
+
 bool SCENE::loadSTL(const char* stl, COLOR color)
 {
     //const char *stl = "suzanne.stl";

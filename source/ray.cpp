@@ -21,16 +21,16 @@ RAY::~RAY()
 }
 
 // TODO: nicer way of passing along maxdepth?
-COLOR RAY::shootPrimaryRay(SCENE &scene, double i_w, double i_h,
+COLOR RAY::shootPrimaryRay(const SCENE& scene, double i_w, double i_h,
                             int img_width, int img_heigth, int max_depth, unsigned long& raycounter)
 {
-    origin = scene.camera.getCameraPosition();
-    direction = scene.camera.getPrimaryRayDirection(i_w, i_h, img_width, img_heigth);
+    origin = scene.getCamera().getCameraPosition();
+    direction = scene.getCamera().getPrimaryRayDirection(i_w, i_h, img_width, img_heigth);
     
     return collideRay(scene, 1, max_depth, raycounter);
 }
 
-COLOR RAY::shootRay(const SCENE &scene, POINT o, VECTOR3 d, int cur_depth, int max_depth, unsigned long& raycounter)
+COLOR RAY::shootRay(const SCENE& scene, POINT o, VECTOR3 d, int cur_depth, int max_depth, unsigned long& raycounter)
 {
     origin = o;
     direction = d;

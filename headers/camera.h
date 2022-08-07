@@ -21,7 +21,7 @@ class CAMERA
             VECTOR3 lookat;
 
             VECTOR3 getPrimaryRayDirection(double i_w, double i_h, int img_width, int img_heigth);
-            POINT getCameraPosition();
+            const POINT getCameraPosition();
 };
 
 #endif // CAMERA_H_INCLUDED

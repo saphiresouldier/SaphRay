@@ -19,10 +19,10 @@ class RAY
             RAY(POINT o, VECTOR3 d);
             virtual ~RAY();
 
-            COLOR shootPrimaryRay(SCENE& scene, double i_w, double i_h,
+            COLOR shootPrimaryRay(const SCENE& scene, double i_w, double i_h,
                                     int img_width, int img_heigth, int max_depth, unsigned long& raycounter);
-            COLOR shootRay(const SCENE &scene, POINT o, VECTOR3 d, int cur_depth, int max_depth, unsigned long& raycounter);
-            COLOR collideRay(const SCENE &scene, int cur_depth, int max_depth, unsigned long& raycounter);
+            COLOR shootRay(const SCENE& scene, POINT o, VECTOR3 d, int cur_depth, int max_depth, unsigned long& raycounter);
+            COLOR collideRay(const SCENE& scene, int cur_depth, int max_depth, unsigned long& raycounter);
             COLOR computeBackgroundColor(const SCENE& scene);
 
             POINT origin;

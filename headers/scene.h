@@ -27,6 +27,7 @@ class SCENE
             void placeLight(float intensity, POINT pos, COLOR col);
             void printLights();
             void createCamera(POINT center, VECTOR3 direction, float field_of_view);
+            CAMERA getCamera() const;
             void setName(std::string sceneName);
             std::string getName() const;
             bool loadSTL(const char *stl, COLOR color);

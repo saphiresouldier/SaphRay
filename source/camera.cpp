@@ -33,7 +33,7 @@ VECTOR3 CAMERA::getPrimaryRayDirection(double i_w, double i_h, int img_width, in
     return dir;
 }
 
-POINT CAMERA::getCameraPosition()
+const POINT CAMERA::getCameraPosition()
 {
     return center;
 }

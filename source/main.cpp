@@ -10,6 +10,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <thread>
+#include <vector>
 
 #include "../headers/scene.h"
 #include "../headers/color.h"
@@ -28,6 +30,33 @@ static thread_local uint32_t seed_state = 1337;
 
 // forward declarations -------------------------------------------------------
 bool saveBMP(COLOR** pix, const char* filename);
+
+void shootPrimaryRaySamples(COLOR**& pixels, const int j, const SCENE& test_scene, unsigned long& raycounter)
+{
+  for (int i = 0; i < IMAGEWIDTH; i++)
+  {
+    for (int k = 0; k < SAMPLES_PER_PIXEL; k++)
+    {
+      //Scale view plane for aspect ratio fix (otherwise image looks stretched)
+      double uScale = 1.0;
+      double vScale = 1.0;
+      if (IMAGEWIDTH > IMAGEHEIGHT)
+        uScale = (double)IMAGEWIDTH / IMAGEHEIGHT;
+      else if (IMAGEWIDTH < IMAGEHEIGHT)
+        vScale = (double)IMAGEHEIGHT / IMAGEWIDTH;
+
+      // TODO
+      //uScale = 1.0 / uScale;
+      //vScale = 1.0 / vScale;
+
+      RAY primray;
+      // TODO: i and j swapped!
+      pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * uScale, ((double)i + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH, raycounter);
+    }
+
+    pixels[i][j] /= SAMPLES_PER_PIXEL;
+  }
+}
 
 // main function --------------------------------------------------------------
 int main (int argc, char* const argv[])
@@ -48,24 +77,8 @@ int main (int argc, char* const argv[])
             IMAGEWIDTH = atoi(argv[i+1]);
         }
     }
-    //Create Scene
+    // Create Scene
     SCENE test_scene;
-
-    // Create Image
-    COLOR** pixels;
-    try
-    {
-      // TODO: width and height swapped!
-        pixels = new COLOR*[IMAGEWIDTH];
-        for(int i= 0; i < IMAGEWIDTH; ++i)
-        {
-            pixels[i] = new COLOR[IMAGEHEIGHT];
-        }
-    }
-    catch(std::bad_alloc &ba)
-    {
-        std::cerr << "bad_alloc: " << ba.what() << std::endl;
-    }
 
 // testscene_stl_1----------------------------------------------
     test_scene.setName("testscene_stl_1");
@@ -116,39 +129,40 @@ int main (int argc, char* const argv[])
     test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);*/
 
     const clock_t begin_time = clock();
-    unsigned long rays = 0;
+    unsigned long rays = 1;
+
+    // Create Image
+    COLOR** pixels;
+    try
+    {
+      // TODO: width and height swapped!
+      pixels = new COLOR * [IMAGEWIDTH];
+      for (int i = 0; i < IMAGEWIDTH; ++i)
+      {
+        pixels[i] = new COLOR[IMAGEHEIGHT];
+      }
+    }
+    catch (std::bad_alloc& ba)
+    {
+      std::cerr << "bad_alloc: " << ba.what() << std::endl;
+    }
+
+    // Create threads
+    std::vector<std::thread> threads;
 
     std::cout << "------------ Starting Rendering of scene: " << test_scene.name << " !----------------" << std::endl;
 
     for(int j = 0; j < IMAGEHEIGHT; j++)
     {
-        for(int i = 0; i < IMAGEWIDTH; i++)
-        {
-          for (int k = 0; k < SAMPLES_PER_PIXEL; k++)
-          {
-            //Scale view plane for aspect ratio fix (otherwise image looks stretched)
-            double uScale = 1.0;
-            double vScale = 1.0;
-            if (IMAGEWIDTH > IMAGEHEIGHT)
-              uScale = (double)IMAGEWIDTH / IMAGEHEIGHT;
-            else if (IMAGEWIDTH < IMAGEHEIGHT)
-              vScale = (double)IMAGEHEIGHT / IMAGEWIDTH;
+      threads.push_back(std::thread(shootPrimaryRaySamples, std::ref(pixels), j, std::ref(test_scene), std::ref(rays)));
 
-            // TODO
-            //uScale = 1.0 / uScale;
-            //vScale = 1.0 / vScale;
+      if (j % 10 == 0) {
+        std::cout << "rendered: " << j << " of " << IMAGEHEIGHT << " rows!" << std::endl;
+      }  
+    }
 
-            RAY primray;
-            // TODO: i and j swapped!
-            pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * uScale, ((double)i + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH, rays);
-          }
-            
-          pixels[i][j] /= SAMPLES_PER_PIXEL;
-        }
-
-        if (j % 10 == 0) {
-          std::cout << "rendered: " << j << " of " << IMAGEHEIGHT << " rows!" << std::endl;
-        }  
+    for (auto& th : threads) {
+      th.join();
     }
 
     float seconds = float(clock() - begin_time) / CLOCKS_PER_SEC;
