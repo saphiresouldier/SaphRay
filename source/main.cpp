@@ -20,9 +20,9 @@
 #include "../headers/rng.h"
 
 // config parameters ---------------------------------------------------------
-int IMAGEWIDTH = 512;
-int IMAGEHEIGHT = 512;
-const int SAMPLES_PER_PIXEL = 8;
+int IMAGEWIDTH = 600;
+int IMAGEHEIGHT = 400;
+const int SAMPLES_PER_PIXEL = 1;
 const int MAXDEPTH = 3;
 const char* FILE_EXTENSION = ".bmp"; 
 
@@ -45,13 +45,11 @@ void shootPrimaryRaySamples(COLOR**& pixels, const int j, const SCENE& test_scen
       else if (IMAGEWIDTH < IMAGEHEIGHT)
         vScale = (double)IMAGEHEIGHT / IMAGEWIDTH;
 
-      // TODO
-      //uScale = 1.0 / uScale;
-      //vScale = 1.0 / vScale;
+      uScale = 1.0 / uScale;
+      vScale = 1.0 / vScale;
 
       RAY primray;
-      // TODO: i and j swapped!
-      pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)j + RandomFloat01(seed_state)) * uScale, ((double)i + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH, raycounter);
+      pixels[i][j] += primray.shootPrimaryRay(test_scene, ((double)i + RandomFloat01(seed_state)) * uScale, ((double)j + RandomFloat01(seed_state)) * vScale, IMAGEWIDTH, IMAGEHEIGHT, MAXDEPTH, raycounter);
     }
 
     pixels[i][j] /= SAMPLES_PER_PIXEL;
@@ -82,19 +80,19 @@ int main (int argc, char* const argv[])
 
 // testscene_stl_1----------------------------------------------
     test_scene.setName("testscene_stl_1");
-    test_scene.placeSphere(2.0, POINT(0.25, -3.0, 2.0), COLOR(1.0f, 1.0f, 1.0f)); //big sphere
+    test_scene.placeSphere(2.0, POINT(0.0, 0.0, 2.0), COLOR(1.0f, 1.0f, 1.0f)); //big sphere
     test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
     test_scene.placeSphere(0.7, POINT(-5.5, -4.0, 3.0), COLOR(1.0f, 0.6f, 0.0f)); //small sphere
-    if(test_scene.loadSTL("../models/suzanne_plane_3.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
+    if(test_scene.loadSTL("../models/suzanne_4.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
     {
-        std::cout << "STL file loaded" << std::endl;
+        std::cout << "STL file loaded: models/suzanne_4.stl" << std::endl;
     }
     if (test_scene.loadSTL("../models/plane_1.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
     {
-      std::cout << "STL file loaded" << std::endl;
+      std::cout << "STL file loaded: models/plane_1.stl" << std::endl;
     }
     test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
-    test_scene.createCamera(POINT(-3.5f, 0.0, -10.0), VECTOR3(0.2f, 0.0f, 1.0f), 60.0f);
+    test_scene.createCamera(POINT(0.0f, 1.0f, -10.0), VECTOR3(0.0f, -0.1f, 1.0f), 60.0f);
 
 // testscene_triangle_1----------------------------------------
     //test_scene.setName("testscene_triangle_1");
@@ -135,7 +133,6 @@ int main (int argc, char* const argv[])
     COLOR** pixels;
     try
     {
-      // TODO: width and height swapped!
       pixels = new COLOR * [IMAGEWIDTH];
       for (int i = 0; i < IMAGEWIDTH; ++i)
       {
@@ -150,7 +147,7 @@ int main (int argc, char* const argv[])
     // Create threads
     std::vector<std::thread> threads;
 
-    std::cout << "------------ Starting Rendering of scene: " << test_scene.name << " !----------------" << std::endl;
+    std::cout << "------------ Starting Rendering of scene: " << test_scene.name.c_str() << " !----------------" << std::endl;
 
     for(int j = 0; j < IMAGEHEIGHT; j++)
     {
@@ -175,7 +172,7 @@ int main (int argc, char* const argv[])
     std::string filename = test_scene.getName().append(FILE_EXTENSION);
     if(saveBMP(pixels, filename.c_str()))
     {
-        std::cout << "File written to: " << filename << std::endl;
+        std::cout << "File written to: " << filename.c_str() << std::endl;
     }
     else
     {
