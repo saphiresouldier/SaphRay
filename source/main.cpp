@@ -22,7 +22,7 @@
 // config parameters ---------------------------------------------------------
 int IMAGEWIDTH = 600;
 int IMAGEHEIGHT = 400;
-const int SAMPLES_PER_PIXEL = 1;
+const int SAMPLES_PER_PIXEL = 4;
 const int MAXDEPTH = 3;
 const char* FILE_EXTENSION = ".bmp"; 
 
@@ -75,48 +75,45 @@ int main (int argc, char* const argv[])
             IMAGEWIDTH = atoi(argv[i+1]);
         }
     }
+
+    const clock_t begin_building_scene = clock();
+
     // Create Scene
     SCENE test_scene;
 
 // testscene_stl_1----------------------------------------------
-    test_scene.setName("testscene_stl_1");
-    test_scene.placeSphere(2.0, POINT(0.0, 0.0, 2.0), COLOR(1.0f, 1.0f, 1.0f)); //big sphere
-    test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    test_scene.placeSphere(0.7, POINT(-5.5, -4.0, 3.0), COLOR(1.0f, 0.6f, 0.0f)); //small sphere
-    if(test_scene.loadSTL("../models/suzanne_4.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
-    {
-        std::cout << "STL file loaded: models/suzanne_4.stl" << std::endl;
-    }
-    if (test_scene.loadSTL("../models/plane_1.stl", COLOR(0.5f, 0.5f, 0.5f)))  // stl mesh
-    {
-      std::cout << "STL file loaded: models/plane_1.stl" << std::endl;
-    }
-    test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f, 1.0f, -10.0), VECTOR3(0.0f, -0.1f, 1.0f), 60.0f);
+    //test_scene.setName("testscene_stl_1");
+    //test_scene.placeSphere(2.0, POINT(4.0, 2.0, 2.0), COLOR(1.0f, 1.0f, 1.0f)); //big sphere
+    //test_scene.placeSphere(0.6, POINT(-3.0, 2.0, 3.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    //test_scene.placeSphere(0.7, POINT(-5.5, 4.0, 3.0), COLOR(1.0f, 0.6f, 0.0f)); //small sphere
+    //test_scene.loadSTL("../models/suzanne_4.stl", COLOR(0.5f, 0.5f, 0.5f));  // stl mesh
+    //test_scene.loadSTL("../models/plane_1.stl", COLOR(0.5f, 0.5f, 0.5f));  // stl mesh
+    //test_scene.placeLight(500.0, POINT(-13.0, 2.5, -15.0), COLOR(1.0));
+    //test_scene.createCamera(POINT(0.0f, 4.0f, -10.0), VECTOR3(0.0f, -0.3f, 1.0f), 60.0f);
 
 // testscene_triangle_1----------------------------------------
     //test_scene.setName("testscene_triangle_1");
-    //test_scene.placeSphere(2.0, POINT(0.0, -2.5, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
-    //test_scene.placeSphere(0.6, POINT(-2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
-    //test_scene.placeTriangle(VECTOR3(0.0, 1.0, 5.0), VECTOR3(0.0, -1.0, 5.0), VECTOR3(-1.5, 0.0, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
+    //test_scene.placeSphere(2.0, POINT(-2.5, 0.0, 7.0), COLOR(0.7f, 0.7f, 0.7f)); //big sphere
+    //test_scene.placeSphere(0.6, POINT(2.0, 2.0, 6.0), COLOR(0.0f, 0.7f, 0.7f)); //small sphere
+    //test_scene.placeTriangle(VECTOR3(1.0, 0.0, 5.0), VECTOR3(-1.0, 0.0, 5.0), VECTOR3(0.0, 1.5, 5.0), VECTOR3(0.0, 0.0, -1.0), COLOR(0.8));
     //test_scene.placeLight(40.0, POINT(-3.0, 2.5, 0.0), COLOR(1.0));
     //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1-------------------------------------------------
-    //test_scene.setName("testscene_1");
-    //test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
-    //test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
-    //test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
-    //test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
-    ////test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0)); //TODO: artifact on left sphere
-    //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
+    test_scene.setName("testscene_1");
+    test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
+    test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
+    test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
+    test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
+    test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0));
+    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
 //testscene_2---------------------------------------------------
     //test_scene.setName("testscene_2");
     //test_scene.placeSphere(1.0, POINT(0.0, 1.0, 6.0), COLOR(0.0f, 0.0f, 0.8f)); //blue
     //test_scene.placeSphere(2.0, POINT(0.0, -1.0, 10.0), COLOR(0.0f, 1.0f, 0.0f)); //green
     //test_scene.placeSphere(51.0, POINT(53.0, 0.0, 8.0), COLOR(0.8f, 0.8f, 0.8f)); //"ground plane"
-    //test_scene.placeLight(200.0, POINT(-20.0, 0.0, 8.0), COLOR(1.0)); //set intesity higher in case of black render
+    //test_scene.placeLight(200.0, POINT(-20.0, 0.0, 8.0), COLOR(1.0)); //set intensity higher in case of black render
     //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
 //testscene_depth-----------------------------------------------
@@ -126,7 +123,8 @@ int main (int argc, char* const argv[])
     test_scene.placeLight(150.0, POINT(-2.0, 2.0, 0.0), COLOR(1.0));
     test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);*/
 
-    const clock_t begin_time = clock();
+    float scene_build_time = float(clock() - begin_building_scene) / CLOCKS_PER_SEC;
+    const clock_t begin_render = clock();
     unsigned long rays = 1;
 
     // Create Image
@@ -162,11 +160,12 @@ int main (int argc, char* const argv[])
       th.join();
     }
 
-    float seconds = float(clock() - begin_time) / CLOCKS_PER_SEC;
-    int min = static_cast<int>(seconds / 60);
-    std::cout << "Rendertime: " << min << " min, " << seconds - (min * 60.0) << " seconds" << std::endl;
+    float render_time = float(clock() - begin_render) / CLOCKS_PER_SEC;
+    int min = static_cast<int>(render_time / 60);
+    std::cout << "Scene Build Time: " << static_cast<int>(scene_build_time / 60) << " min, " << scene_build_time - (static_cast<int>(scene_build_time / 60) * 60.0) << " seconds" << std::endl;
+    std::cout << "Rendertime: " << static_cast<int>(render_time / 60) << " min, " << render_time - (static_cast<int>(render_time / 60) * 60.0) << " seconds" << std::endl;
     std::cout << "Number of rays traced: " << rays << std::endl;
-    std::cout << "MRays/s: " << rays / 1000.0 / seconds << std::endl;
+    std::cout << "MRays/s: " << rays / 1000.0 / render_time << std::endl;
 
     // Save rendered image to disk
     std::string filename = test_scene.getName().append(FILE_EXTENSION);
