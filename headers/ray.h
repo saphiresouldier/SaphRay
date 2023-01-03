@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <limits>
+#include <algorithm>
 #include "color.h"
 #include "vector.h"
 #include "point.h"

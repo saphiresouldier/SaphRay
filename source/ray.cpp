@@ -104,8 +104,8 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth, unsigned
               normal.normalize();
               return COLOR((normal.x + 1.0) / 2.0, (normal.y + 1.0) / 2.0, (normal.z + 1.0) / 2.0);
 #endif
-
-                double contribution = (theta * scene.lights[j]->intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
+                // TODO: remove clamping once proper tonemapping is there
+                double contribution = std::max(0.0, std::min((theta * scene.lights[j]->intensity) / (dist * dist), 1.0)); //proper inverse square lighting falloff //[j]
                 //TODO: don't calculate refl vector if maxdepth is reached
                 //calculate reflection vector
                 VECTOR3 view = VECTOR3(origin) - intersection_point;
@@ -117,17 +117,17 @@ COLOR RAY::collideRay(const SCENE& scene, int cur_depth, int max_depth, unsigned
                 if(cur_depth < max_depth)
                 {
                     refl_col = reflection->collideRay(scene, cur_depth + 1, max_depth, raycounter);
-                    final_col += ((col * (scene.lights[j]->color * contribution)) * 0.7) + (refl_col * 0.3); //TODO: Clamp this to ensure no artifacts
+                    final_col += ((col * (scene.lights[j]->color * contribution)) * 0.7) + (refl_col * 0.3);
                     //final_col += refl_col;
                 }
                 else
                 {
-                    final_col += ((col * (scene.lights[j]->color * contribution))); //TODO: Clamp this to ensure no artifacts
+                    final_col += ((col * (scene.lights[j]->color * contribution)));
                 }
 
                 //calculate shading
                 //double contribution = (theta * scene.lights[j].intensity) / (dist * dist); //proper inverse square lighting falloff //[j]
-                //final_col += ((col * (scene.lights[j].color * contribution)) * 0.5) + (refl_col * 0.5); //TODO: Clamp this to ensure no artifacts
+                //final_col += ((col * (scene.lights[j].color * contribution)) * 0.5) + (refl_col * 0.5);
                 //final_col += COLOR(theta); //use this to visualize individual properties
                 //final_col += refl_col; //use this to visualize individual properties
 

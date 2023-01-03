@@ -22,7 +22,7 @@
 // config parameters ---------------------------------------------------------
 int IMAGEWIDTH = 600;
 int IMAGEHEIGHT = 400;
-const int SAMPLES_PER_PIXEL = 4;
+const int SAMPLES_PER_PIXEL = 8;
 const int MAXDEPTH = 3;
 const char* FILE_EXTENSION = ".bmp"; 
 
@@ -100,13 +100,13 @@ int main (int argc, char* const argv[])
     //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 60.0f);
 
 // testscene_1-------------------------------------------------
-    test_scene.setName("testscene_1");
+    /*test_scene.setName("testscene_1");
     test_scene.placeSphere(2.0, POINT(0.0, -3.0, 6.0), COLOR(0.7f, 0.7f, 0.7f));
     test_scene.placeSphere(0.6, POINT(-2.0, 3.0, 9.0), COLOR(0.0f, 0.7f, 0.7f));
     test_scene.placeSphere(0.5, POINT(0.0, 0.0, 5.0), COLOR(0.8f, 0.0f, 0.5f));
     test_scene.placeLight(70.0, POINT(-2.0, 10.0, 3.0), COLOR(1.0));
     test_scene.placeLight(50.0, POINT(2.0, 10.0, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
+    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);*/
 
 //testscene_2---------------------------------------------------
     //test_scene.setName("testscene_2");
@@ -117,11 +117,11 @@ int main (int argc, char* const argv[])
     //test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
 //testscene_depth-----------------------------------------------
-    /*test_scene.setName("testscene_depth");
+    test_scene.setName("testscene_depth_bug");
     test_scene.placeSphere(2.0, POINT(0.0, 0.0, 10.0), COLOR(0.5f, 1.0f, 0.0f));
     test_scene.placeSphere(0.5, POINT(0.0, 0.0, 6.0), COLOR(0.0f, 0.0f, 0.8f));
     test_scene.placeLight(150.0, POINT(-2.0, 2.0, 0.0), COLOR(1.0));
-    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);*/
+    test_scene.createCamera(POINT(0.0f), VECTOR3(0.0f, 0.0f, 1.0f), 45.0f);
 
     float scene_build_time = float(clock() - begin_building_scene) / CLOCKS_PER_SEC;
     const clock_t begin_render = clock();
